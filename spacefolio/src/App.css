@@ -1,0 +1,69 @@
+body {
+  margin: 0;
+  background: black;
+  font-family: "Orbitron", sans-serif;
+  cursor: none;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* Videos */
+.video-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -10;
+}
+
+/* Overlay */
+.dissolve-overlay {
+  position: fixed;
+  inset: 0;
+  background: black;
+  opacity: 0;
+  transition: opacity 1s ease;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Cursor */
+.cursor {
+  position: fixed;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ffffffaa;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s ease;
+}
+
+/* Hero Section */
+.hero-section {
+  position: relative;
+  z-index: 20;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 1.2s ease-out forwards;
+  animation-delay: 0.5s;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
