@@ -1,0 +1,78 @@
+.video-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -10;
+}
+
+.dissolve {
+  position: fixed;
+  inset: 0;
+  background: black;
+  opacity: 0;
+  transition: opacity 1s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.dissolve.show {
+  opacity: 1;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 20;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 5;
+  position: relative;
+}
+
+.hero h2 {
+  font-size: 3rem;
+  animation: pulse 2s infinite;
+}
+
+.hero p {
+  margin-top: 1rem;
+  max-width: 600px;
+  opacity: 0.85;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.hidden {
+  opacity: 0;
+}
+
+.fade-in {
+  animation: fadeIn 1.5s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
