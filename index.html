@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+  <head><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+
     <meta charset="UTF-8" />
     <title>Rishit's Spacefolio</title>
     <link
@@ -12,5 +19,29 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      const icons = document.querySelectorAll('.tech-icon');
+    
+      icons.forEach(icon => {
+        const x1 = `${Math.random() * 100 - 50}vw`;
+        const y1 = `${Math.random() * 100 - 50}vh`;
+        const x2 = `${Math.random() * 100 - 50}vw`;
+        const y2 = `${Math.random() * 100 - 50}vh`;
+        const x3 = `${Math.random() * 100 - 50}vw`;
+        const y3 = `${Math.random() * 100 - 50}vh`;
+        const duration = Math.random() * 10 + 10;
+    
+        icon.style.setProperty('--x-start', x1);
+        icon.style.setProperty('--y-start', y1);
+        icon.style.setProperty('--x-mid', x2);
+        icon.style.setProperty('--y-mid', y2);
+        icon.style.setProperty('--x-end', x3);
+        icon.style.setProperty('--y-end', y3);
+        icon.style.animationDuration = `${duration}s`;
+        icon.style.top = `${Math.random() * 90}%`;
+        icon.style.left = `${Math.random() * 90}%`;
+      });
+    </script>
+    
   </body>
 </html>
