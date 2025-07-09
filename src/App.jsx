@@ -225,7 +225,7 @@ function App() {
           </li>
           <li>
             <a
-              href="https://drive.google.com/file/d/1ufHTnnoqZAh_xlrmaPFbDeGjV05iQwFT/view?usp=sharing"
+              href="https://drive.google.com/file/d/1wtc5md-_SB6tOljpnlCIoD19yIWOvcy-/view?usp=sharing"
               style={{ color: "#ccc" }}
               target="_blank"
               rel="noopener noreferrer"
