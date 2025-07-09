@@ -308,7 +308,7 @@ function App() {
           <img src="/assets/MongoDB.svg" class="tech-icon" />
           <img src="/assets/Java.svg" class="tech-icon" />
           <img src="/assets/C.svg" class="tech-icon" />
-          <img src="/assets/C++ (CPlusPlus).svg" class="tech-icon" />
+          <img src="/assets/Cplus.svg" class="tech-icon" />
           <img src="/assets/Git.svg" class="tech-icon" />
           <img src="/assets/github-142-svgrepo-com.svg" class="tech-icon" />
           <img src="/assets/IntelliJ IDEA.svg" class="tech-icon" />
