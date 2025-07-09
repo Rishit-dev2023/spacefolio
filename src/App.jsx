@@ -1,11 +1,91 @@
 import { useRef, useEffect, useState } from "react";
 import "./App.css";
+import emailjs from "@emailjs/browser";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
   const blackholeRef = useRef(null);
   const nebulaRef = useRef(null);
   const dissolveRef = useRef(null);
   const [transitioned, setTransitioned] = useState(false);
+
+  const formRef = useRef();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    emailjs
+      .sendForm(
+        "service_xeyfein", // Replace with your EmailJS service ID
+        "template_0e968uy", // Replace with your template ID
+        formRef.current,
+        "yKvWx_BBv2VFOVd8t" // Replace with your public key
+      )
+      .then(
+        (result) => {
+          alert("✅ Message sent successfully!");
+          formRef.current.reset();
+        },
+        (error) => {
+          alert("❌ Message failed to send.");
+          console.error(error);
+        }
+      );
+  };
+
+  useEffect(() => {
+    const blackhole = blackholeRef.current;
+    const nebula = nebulaRef.current;
+
+    let blackholeReady = false;
+    let nebulaReady = false;
+
+    const checkBothReady = () => {
+      if (blackholeReady && nebulaReady) {
+        setIsLoading(false);
+      }
+    };
+
+    const handleBlackholeReady = () => {
+      blackholeReady = true;
+      checkBothReady();
+    };
+
+    const handleNebulaReady = () => {
+      nebulaReady = true;
+      checkBothReady();
+    };
+
+    if (blackhole) {
+      if (blackhole.readyState >= 3) {
+        handleBlackholeReady();
+      } else {
+        blackhole.addEventListener("canplaythrough", handleBlackholeReady);
+      }
+    }
+
+    if (nebula) {
+      if (nebula.readyState >= 3) {
+        handleNebulaReady();
+      } else {
+        nebula.addEventListener("canplaythrough", handleNebulaReady);
+      }
+    }
+
+    // Fallback timeout after 10s
+    const timeoutId = setTimeout(() => {
+      console.warn("⚠️ Loading fallback triggered after 10s.");
+      setIsLoading(false);
+    }, 10000);
+
+    return () => {
+      if (blackhole)
+        blackhole.removeEventListener("canplaythrough", handleBlackholeReady);
+      if (nebula)
+        nebula.removeEventListener("canplaythrough", handleNebulaReady);
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
   // Video time trigger
   useEffect(() => {
@@ -78,14 +158,36 @@ function App() {
 
   return (
     <>
+      {isLoading && (
+        <div className={`loading-screen ${!isLoading ? "fade-out" : ""}`}>
+          <div className="loader"></div>
+          <p>🚀 Initiating Cosmic Interface...</p>
+        </div>
+      )}
       {/* 🔭 Blackhole Video */}
-      <video ref={blackholeRef} muted autoPlay playsInline className="video-bg">
-        <source src="/assets/blackhole.mp4" type="video/mp4" />
+      <video
+        ref={blackholeRef}
+        className="video-bg"
+        autoPlay
+        muted
+        playsInline
+        preload="auto"
+      >
+        <source src="/assets/blackhole.webm" type="video/webm" />
+        Your browser does not support the video tag.
       </video>
 
       {/* 🌌 Nebula Video */}
-      <video ref={nebulaRef} muted loop playsInline className="video-bg hidden">
-        <source src="/assets/nebula.mp4" type="video/mp4" />
+      <video
+        ref={nebulaRef}
+        className="video-bg hidden"
+        autoPlay
+        muted
+        playsInline
+        preload="auto"
+      >
+        <source src="/assets/nebula.webm" type="video/webm" />
+        Your browser does not support the video tag.
       </video>
 
       {/* 🕳️ Dissolve Transition */}
@@ -194,7 +296,7 @@ function App() {
           <img src="/assets/HTML5.svg" class="tech-icon" />
           <img src="/assets/CSS3.svg" class="tech-icon" />
           <img src="/assets/JavaScript.svg" class="tech-icon" />
-          <img src="/assets/React.svg" class="tech-icon" />
+          <img src="/assets/react.svg" class="tech-icon" />
           <img src="/assets/Node.js.svg" class="tech-icon" />
           <img src="/assets/Tailwind CSS.svg" class="tech-icon" />
           <img src="/assets/MongoDB.svg" class="tech-icon" />
@@ -202,7 +304,7 @@ function App() {
           <img src="/assets/C.svg" class="tech-icon" />
           <img src="/assets/C++ (CPlusPlus).svg" class="tech-icon" />
           <img src="/assets/Git.svg" class="tech-icon" />
-          <img src="/assets/GitHub.svg" class="tech-icon" />
+          <img src="/assets/github-142-svgrepo-com.svg" class="tech-icon" />
           <img src="/assets/IntelliJ IDEA.svg" class="tech-icon" />
           <img
             src="/assets/Visual Studio Code (VS Code).svg"
@@ -220,7 +322,7 @@ function App() {
             className="project-card hoverable"
             onClick={() =>
               window.open(
-                "https://https://github.com/Rishit-dev2023/Kabadiwala-kabadiwala-link.com",
+                "https://github.com/Rishit-dev2023/Kabadiwala",
                 "_blank"
               )
             }
@@ -264,10 +366,24 @@ function App() {
       <section id="contact" className="section">
         <h2>Contact</h2>
         <p>Have a project in mind or just want to talk space? Reach out!</p>
-        <form className="contact-form">
-          <input type="text" placeholder="Your Name" required />
-          <input type="email" placeholder="Your Email" required />
-          <textarea placeholder="Your Message" required></textarea>
+        <form ref={formRef} className="contact-form" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="user_name"
+            placeholder="Your Name"
+            required
+          />
+          <input
+            type="email"
+            name="user_email"
+            placeholder="Your Email"
+            required
+          />
+          <textarea
+            name="message"
+            placeholder="Your Message"
+            required
+          ></textarea>
           <button type="submit">Send Message</button>
         </form>
       </section>
@@ -279,34 +395,31 @@ function App() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img src="/assets/linkedin.svg" alt="LinkedIn" />
+            <img src="/assets/iconmonstr-linkedin-3.svg" alt="LinkedIn" />
           </a>
           <a href="mailto:rishittripathy2020@gmail.com">
-            <img src="/public/assets/email-svgrepo-com.svg" alt="Email" />
+            <img src="/assets/email-svgrepo-com.svg" alt="Email" />
           </a>
           <a
             href="https://github.com/Rishit-dev2023"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img src="/public/assets/github-142-svgrepo-com.svg" alt="GitHub" />
+            <img src="/assets/github-142-svgrepo-com.svg" alt="GitHub" />
           </a>
           <a
             href="https://leetcode.com/u/rishittripathy2020/"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img src="/public/assets/leetcode-svgrepo-com.svg" alt="LeetCode" />
+            <img src="/assets/leetcode-svgrepo-com.svg" alt="LeetCode" />
           </a>
           <a
             href="https://codeforces.com/profile/rishittripathy2020"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img
-              src="/public/assets/codeforces-svgrepo-com.svg"
-              alt="Codeforces"
-            />
+            <img src="/assets/codeforces-svgrepo-com.svg" alt="Codeforces" />
           </a>
         </div>
 

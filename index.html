@@ -1,12 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Orbitron:wght@500&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+  <head>
+    <link
+      rel="preload"
+      href="public/assets/Azure SQL Database.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/C.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/C++ (CPlusPlus).svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/codeforces-svgrepo-com.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/CSS3.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/email-svgrepo-com.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/Git.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/github-142-svgrepo-com.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/GitHub.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/HTML5.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/IntelliJ IDEA.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/Java.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/JavaScript.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/leetcode-svgrepo-com.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/linkedin.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/MongoDB.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/Node.js.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/react.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/Tailwind CSS.svg"
+      as="image"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="public/assets/Visual Studio Code (VS Code).svg"
+      as="image"
+      type="image/svg+xml"
+    />
+
+    <link
+      rel="preload"
+      href="public/assets/blackhole.webm"
+      as="video"
+      type="video/webm"
+    />
+    <link
+      rel="preload"
+      href="public/assets/nebula.webm"
+      as="video"
+      type="video/webm"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat&family=Orbitron:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap"
+      rel="stylesheet"
+    />
 
     <meta charset="UTF-8" />
     <title>Rishit's Spacefolio</title>
@@ -20,9 +170,9 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
     <script>
-      const icons = document.querySelectorAll('.tech-icon');
-    
-      icons.forEach(icon => {
+      const icons = document.querySelectorAll(".tech-icon");
+
+      icons.forEach((icon) => {
         const x1 = `${Math.random() * 100 - 50}vw`;
         const y1 = `${Math.random() * 100 - 50}vh`;
         const x2 = `${Math.random() * 100 - 50}vw`;
@@ -30,18 +180,17 @@
         const x3 = `${Math.random() * 100 - 50}vw`;
         const y3 = `${Math.random() * 100 - 50}vh`;
         const duration = Math.random() * 10 + 10;
-    
-        icon.style.setProperty('--x-start', x1);
-        icon.style.setProperty('--y-start', y1);
-        icon.style.setProperty('--x-mid', x2);
-        icon.style.setProperty('--y-mid', y2);
-        icon.style.setProperty('--x-end', x3);
-        icon.style.setProperty('--y-end', y3);
+
+        icon.style.setProperty("--x-start", x1);
+        icon.style.setProperty("--y-start", y1);
+        icon.style.setProperty("--x-mid", x2);
+        icon.style.setProperty("--y-mid", y2);
+        icon.style.setProperty("--x-end", x3);
+        icon.style.setProperty("--y-end", y3);
         icon.style.animationDuration = `${duration}s`;
         icon.style.top = `${Math.random() * 90}%`;
         icon.style.left = `${Math.random() * 90}%`;
       });
     </script>
-    
   </body>
 </html>
