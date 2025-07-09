@@ -1,40 +1,52 @@
-# 🚀 Spacefolio
+# 🌌 Spacefolio — A Cinematic Portfolio Experience
 
-A futuristic and visually captivating portfolio website built using **React**, **Vite**, and custom animations. Designed to showcase your skills, projects, and personality in a space-themed UI.
+**Live Demo 🚀**: [https://spacefolio-two.vercel.app](https://spacefolio-two.vercel.app)
 
-
-## 🌌 Features
-
-- Animated tech icons floating in a nebula background
-- Interactive and responsive design
-- Preloaded SVGs and video backgrounds
-- Email contact form using EmailJS
-- Font styles from Google Fonts (Orbitron, Zen Dots, etc.)
-- Deployed via Vercel
+> “Love is the one thing we're capable of perceiving that transcends dimensions of time and space.” – *Interstellar*
 
 ---
 
-## 🛠️ Tech Stack
+## 🪐 Overview
 
-- **Frontend**: React + Vite
-- **Styling**: CSS3, Google Fonts
-- **Animation**: CSS keyframes + JS-based dynamic positioning
-- **Forms**: EmailJS (`@emailjs/browser`)
-- **Deployment**: Vercel
+**Spacefolio** is a cosmic-themed developer portfolio built with React + Vite, featuring:
+
+- 🔭 Blackhole-to-Nebula cinematic video transition  
+- 👨‍🚀 Typing hero section and astrophile-themed bio  
+- 🛸 Floating tech stack icons in zero gravity  
+- 💌 EmailJS-powered contact form  
+- 🌠 Fully responsive layout and scroll animations  
+- ☄️ Deployed via Vercel
 
 ---
 
-## 🚧 Local Development
+## ⚙️ Tech Stack
 
-### Prerequisites
+- **Frontend**: React, Vite  
+- **Styling**: CSS3, Custom Fonts, Animations  
+- **Assets**: Video backgrounds, SVG icons  
+- **Forms**: EmailJS (`@emailjs/browser`)  
+- **Deployment**: Vercel  
 
-- Node.js and npm installed
-- Git installed
+---
 
-### Getting Started
+## 🚀 Getting Started
 
 ```bash
 git clone https://github.com/Rishit-dev2023/spacefolio.git
 cd spacefolio
 npm install
 npm run dev
+```
+You’ll need Node.js and Git installed.
+
+✨ Inspiration
+This project was inspired by the cinematic intensity of Interstellar, combined with my passion for development, design, and the cosmos. 🌌
+
+👨‍💻 Author
+Made with love & stardust by Rishit Tripathy
+
+🌍 Portfolio: https://spacefolio-two.vercel.app
+
+📬 Email: rishittripathy2020@gmail.com
+
+© 2025 Rishit Tripathy — All Galaxies Reserved
