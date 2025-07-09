@@ -863,3 +863,13 @@
   opacity: 0;
   pointer-events: none;
 }
+.spacefolio-link h1 {
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.spacefolio-link:hover h1 {
+  transform: scale(1.05);
+  color: #ffd700; /* golden glow */
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+  cursor: pointer;
+}

@@ -195,7 +195,13 @@ function App() {
 
       {/* 🚀 Navbar */}
       <nav className="navbar">
-        <h1>🌠 Rishit's Spacefolio</h1>
+        <a
+          href="https://spacefolio-two.vercel.app/"
+          className="spacefolio-link"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <h1>🌠 Rishit's Spacefolio</h1>
+        </a>
         <ul style={{ display: "flex", gap: "2rem", fontSize: "1rem" }}>
           <li>
             <a href="#about" style={{ color: "#ccc" }}>
@@ -344,7 +350,7 @@ function App() {
               alert(
                 "🚨Recursion error!!!🚨\nYou're inside a portfolio that links to itself. 🌀\nIf you know, you know 😉"
               );
-              window.open("https://your-spacefolio-link.com", "_blank");
+              window.location.href = "https://spacefolio-two.vercel.app/";
             }}
           >
             <h3>
