@@ -348,7 +348,7 @@ function App() {
             className="project-card hoverable"
             onClick={() => {
               alert(
-                "🚨Recursion error!!!🚨\nYou're inside a portfolio that links to itself. 🌀\nIf you know, you know 😉"
+                "🚨java.lang.StackOverflowError!!!🚨\nYou're inside a portfolio that recurses to itself. 🌀\nIf you know, you know 😉"
               );
               window.location.href = "https://spacefolio-two.vercel.app/";
             }}
