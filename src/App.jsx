@@ -185,6 +185,7 @@ function App() {
         muted
         playsInline
         preload="auto"
+        loop
       >
         <source src="/assets/nebula.webm" type="video/webm" />
         Your browser does not support the video tag.
