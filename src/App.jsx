@@ -252,7 +252,8 @@ function App() {
     },
     {
       title: "🚀 Spacefolio",
-      description: `A cinematic portfolio drifting through blackholes and looping nebulas, crafted with React and cosmic vibes.`,
+      description: `Spacefolio — a cinematic portfolio orbiting through blackholes, dissolving into nebulas, and echoing with a cosmic tune in the background.
+Crafted to feel less like a website, more like a voyage through spacetime.  `,
       link: "https://spacefolio-two.vercel.app/",
       warning: true,
       onClick: () => {
