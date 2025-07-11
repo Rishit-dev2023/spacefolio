@@ -252,8 +252,7 @@ function App() {
     },
     {
       title: "🚀 Spacefolio",
-      description: `A cinematic portfolio drifting through blackholes and looping nebulas, crafted with React and cosmic vibes.
-        (⚠️ Do not Click here!!!)`,
+      description: `A cinematic portfolio drifting through blackholes and looping nebulas, crafted with React and cosmic vibes.`,
       link: "https://spacefolio-two.vercel.app/",
       warning: true,
       onClick: () => {
@@ -431,7 +430,7 @@ function App() {
 
       {/* --- Projects Section --- */}
       <section id="projects" className="section">
-        <h2>My Cosmic Creations</h2>
+        <h2>Projects</h2>
         <div className="projects-grid">
           {projectCards.map((project, index) => (
             <div
