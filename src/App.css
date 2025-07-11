@@ -1,3 +1,6 @@
+/* --- Video and Transition Smoothing --- */
+
+/* Base style for video backgrounds */
 .video-bg {
   position: fixed;
   top: 0;
@@ -5,22 +8,43 @@
   width: 100vw;
   height: 100vh;
   object-fit: cover;
-  z-index: -10;
+  z-index: -10; /* Lower z-index for background videos */
+  opacity: 0; /* Start both videos as invisible by default */
+  transition: opacity 1.2s ease-in-out; /* Smooth transition for opacity */
+  pointer-events: none; /* Do not block interactions by default */
 }
 
+/* This class will be applied to the active video to make it visible */
+.video-bg.is-active {
+  opacity: 1;
+  pointer-events: auto; /* Allow interactions when active (if any) */
+}
+
+/* The dissolve screen */
 .dissolve {
   position: fixed;
-  inset: 0;
+  inset: 0; /* Shorthand for top, right, bottom, left: 0; */
   background: black;
   opacity: 0;
-  transition: opacity 1s ease;
+  transition: opacity 0.8s ease-in-out; /* Slightly faster dissolve transition */
   pointer-events: none;
-  z-index: 10;
+  z-index: 10; /* Ensure it's above videos when active */
 }
 
 .dissolve.show {
   opacity: 1;
+  pointer-events: auto; /* Block interactions when visible */
 }
+
+/* We'll modify the JS to manage 'hidden' vs. 'is-active' */
+/* Remove the existing .hidden and .fade-in keyframes from here */
+/* We'll handle fade-in via .video-bg.is-active directly. */
+/* If you still need a general 'hidden' class, ensure it uses display: none; */
+.hidden {
+  display: none !important; /* Force hide when truly not needed, bypasses opacity transition */
+}
+
+/* --- Your existing CSS for other elements (just for context) --- */
 
 .navbar {
   position: fixed;
@@ -69,19 +93,6 @@
   }
 }
 
-.hidden {
-  opacity: 0;
-}
-
-.fade-in {
-  animation: fadeIn 1.5s forwards;
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
-}
 .section {
   padding: 6rem 2rem;
   text-align: center;
@@ -110,7 +121,6 @@
   opacity: 0.9;
 }
 
-/* Projects Grid */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -132,7 +142,6 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* Contact Form */
 .contact-form {
   display: flex;
   flex-direction: column;
@@ -172,6 +181,7 @@
 .contact-form button:hover {
   background: #8bc4ff;
 }
+
 .about-section {
   padding: 6rem 2rem;
   max-width: 800px;
@@ -232,6 +242,7 @@
   font-weight: 600;
   padding-left: 4px;
 }
+
 .letter-animate {
   display: inline-block;
   position: relative;
@@ -271,6 +282,7 @@
     text-shadow: 0 0 5px #ffffff33, 0 0 10px #6ec6ff55;
   }
 }
+
 .letter-animate {
   display: inline-block;
   animation: fontMorph 6s infinite ease-in-out;
@@ -306,7 +318,7 @@
     color: #ffa94d;
   }
 }
-/* Enchanting Letter Animation */
+
 .magic-letter {
   display: inline-block;
   font-family: "Orbitron", sans-serif;
@@ -315,7 +327,6 @@
   transition: all 0.3s ease-in-out;
 }
 
-/* Morphs between fonts */
 @keyframes fontMorph {
   0% {
     font-family: "Orbitron";
@@ -331,7 +342,6 @@
   }
 }
 
-/* Fade-in slide effect for whole section */
 .fade-in-enchant {
   opacity: 0;
   animation: fadeSlideUp 1.8s ease forwards;
@@ -346,30 +356,6 @@
   100% {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* Paragraph Glow */
-.about-description {
-  max-width: 800px;
-  line-height: 1.8;
-  font-size: 1.1rem;
-  color: #ccc;
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.02);
-  padding: 1rem 1.5rem;
-  border-radius: 16px;
-  backdrop-filter: blur(6px);
-  margin-top: 2rem;
-  animation: softGlow 6s ease-in-out infinite alternate;
-}
-
-@keyframes softGlow {
-  from {
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
-  }
-  to {
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
   }
 }
 
@@ -389,20 +375,7 @@
   color: #aaa;
   margin-top: 0.5rem;
 }
-.about-description {
-  max-width: 800px;
-  line-height: 1.8;
-  font-size: 1.1rem;
-  color: #f0f0f0; /* Brighter text */
-  background: rgba(0, 0, 0, 0.5); /* Dark semi-transparent background */
-  padding: 1.5rem 2rem;
-  border-radius: 16px;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
-  margin-top: 2rem;
-  animation: softGlow 6s ease-in-out infinite alternate;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); /* Adds depth */
-}
+
 .about-intro {
   font-size: 1.4rem;
   color: #ffffff;
@@ -435,6 +408,7 @@
     text-shadow: 0 0 3px rgba(0, 0, 0, 0.8), 0 0 6px rgba(0, 0, 0, 0.5);
   }
 }
+
 .about-intro::after,
 .about-role::after {
   content: "";
@@ -447,6 +421,7 @@
   z-index: -1;
   filter: blur(12px);
 }
+
 .about-description {
   max-width: 800px;
   margin-top: 2rem;
@@ -480,6 +455,7 @@
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.03);
   }
 }
+
 .cosmic-quote {
   font-size: 1rem;
   max-width: 700px;
@@ -512,6 +488,7 @@
     filter: blur(0);
   }
 }
+
 .cosmic-quote::after {
   content: "";
   position: absolute;
@@ -542,6 +519,7 @@
     opacity: 0;
   }
 }
+
 .hero-title {
   font-size: 3.5rem;
   font-family: "Zen Dots", sans-serif;
@@ -562,12 +540,14 @@
     transform: scale(1.015);
   }
 }
+
 .cosmic-quote {
   font-size: 1.1rem;
   font-family: "Zen Dots", sans-serif;
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.6), 0 0 10px rgba(0, 0, 0, 0.3);
   animation: cosmicDustIn 3s ease-out forwards 1.2s;
 }
+
 .animated-border-text {
   position: relative;
   display: inline-block;
@@ -579,7 +559,6 @@
   z-index: 1;
 }
 
-/* Outer animated border using pseudo element */
 .animated-border-text::before {
   content: "";
   position: absolute;
@@ -610,6 +589,7 @@
     background-position: 0% 50%;
   }
 }
+
 .cosmic-quote {
   font-family: "Zen Dots", sans-serif;
   font-size: 1.1rem;
@@ -624,7 +604,6 @@
   letter-spacing: 0.05em;
 }
 
-/* Stardust Particle Trail (Optional Layering) */
 .cosmic-quote::before {
   content: "";
   position: absolute;
@@ -672,6 +651,7 @@
     background-position: 0% 50%;
   }
 }
+
 .cosmic-quote {
   font-family: "Satisfy", cursive;
   font-size: 1.5rem;
@@ -687,6 +667,7 @@
   line-height: 1.8;
   text-shadow: 0 0 6px rgba(255, 255, 255, 0.1), 0 0 12px rgba(0, 0, 0, 0.8);
 }
+
 .tech-stack-section {
   text-align: center;
   padding: 4rem 2rem;
@@ -731,13 +712,14 @@
     transform: translateY(0) rotate(0deg);
   }
 }
+
 .floating-icons {
   position: relative;
   height: 350px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 3rem 4rem; /* row-gap and column-gap */
+  gap: 3rem 4rem;
   padding: 1rem;
 }
 
@@ -745,8 +727,9 @@
   width: 60px;
   height: 60px;
   animation: floatZ 6s ease-in-out infinite;
-  transition: transform 0.3s ea;
+  transition: transform 0.3s ease;
 }
+
 #role-typing::after {
   content: "|";
   animation: blink 0.8s infinite;
@@ -765,6 +748,7 @@
     opacity: 0;
   }
 }
+
 .project-card {
   background-color: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -785,7 +769,7 @@
   transform: scale(0.98);
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
-/* styles.css */
+
 @keyframes pulseDanger {
   0%,
   100% {
@@ -799,6 +783,7 @@
 .animate-pulse-danger {
   animation: pulseDanger 1.5s infinite;
 }
+
 .footer {
   padding: 2rem;
   background: rgba(0, 0, 0, 0.6);
@@ -843,6 +828,7 @@
   margin-top: 0.5rem;
   opacity: 0.6;
 }
+
 .loading-screen {
   position: fixed;
   top: 0;
@@ -863,28 +849,18 @@
   opacity: 0;
   pointer-events: none;
 }
+
 .spacefolio-link h1 {
   transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .spacefolio-link:hover h1 {
   transform: scale(1.05);
-  color: #ffd700; /* golden glow */
+  color: #ffd700;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
   cursor: pointer;
 }
-.nebula-fade {
-  opacity: 1;
-  transition: opacity 1.5s ease-in-out;
-}
 
-.nebula-fade-out {
-  opacity: 0;
-}
-
-.nebula-fade-in {
-  opacity: 1;
-}
 .audio-toggle {
   position: fixed;
   bottom: 2rem;
@@ -892,7 +868,7 @@
   z-index: 1000;
   width: 70px;
   height: 70px;
-  background: rgba(192, 192, 192, 0.1); /* silver tone base */
+  background: rgba(192, 192, 192, 0.1);
   border-radius: 50%;
   border: 2px solid rgba(192, 192, 192, 0.4);
   backdrop-filter: blur(10px);
@@ -902,7 +878,7 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 0 12px rgba(192, 192, 192, 0.6), 
+  box-shadow: 0 0 12px rgba(192, 192, 192, 0.6),
               0 0 20px rgba(192, 192, 192, 0.4),
               inset 0 0 10px rgba(192, 192, 192, 0.2);
   animation: pulse-glow 2s infinite ease-in-out;
@@ -921,7 +897,6 @@
   filter: drop-shadow(0 0 2px #fff);
 }
 
-/* Optional pulsing glow animation */
 @keyframes pulse-glow {
   0% {
     box-shadow: 0 0 12px rgba(192, 192, 192, 0.5),
@@ -939,10 +914,10 @@
                 inset 0 0 10px rgba(192, 192, 192, 0.2);
   }
 }
+
 .audio-toggle.static {
   animation: none;
   box-shadow: 0 0 6px rgba(192, 192, 192, 0.3),
               0 0 10px rgba(192, 192, 192, 0.2),
               inset 0 0 5px rgba(192, 192, 192, 0.1);
 }
-

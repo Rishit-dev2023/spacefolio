@@ -1,21 +1,48 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import "./App.css";
 import emailjs from "@emailjs/browser";
 
+// Import icons (ensure these paths are correct relative to your project structure)
+// Paths updated to be absolute from the public directory
+import MuteIcon from "/assets/sound-off.svg";
+import UnmuteIcon from "/assets/sound-on.svg";
+
+// Tech Icons - paths updated to be absolute from the public directory
+import htmlIcon from "/assets/HTML5.svg";
+import cssIcon from "/assets/CSS3.svg";
+import jsIcon from "/assets/JavaScript.svg";
+import reactIcon from "/assets/react.svg";
+import nodeIcon from "/assets/Node.js.svg";
+import tailwindIcon from "/assets/Tailwind CSS.svg";
+import mongodbIcon from "/assets/MongoDB.svg";
+import javaIcon from "/assets/Java.svg";
+import cIcon from "/assets/C.svg";
+import cppIcon from "/assets/Cplus.svg";
+import gitIcon from "/assets/Git.svg";
+import githubIcon from "/assets/github-142-svgrepo-com.svg";
+import intellijIcon from "/assets/IntelliJ IDEA.svg";
+import vscodeIcon from "/assets/Visual Studio Code (VS Code).svg";
+import azureSqlIcon from "/assets/Azure SQL Database.svg";
+
+// Social Icons - paths updated to be absolute from the public directory
+import linkedinSocialIcon from "/assets/iconmonstr-linkedin-3.svg";
+import emailSocialIcon from "/assets/email-svgrepo-com.svg";
+import githubSocialIcon from "/assets/github-142-svgrepo-com.svg";
+import leetcodeSocialIcon from "/assets/leetcode-svgrepo-com.svg";
+import codeforcesSocialIcon from "/assets/codeforces-svgrepo-com.svg";
+
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-
-  const blackholeRef = useRef(null);
-  const nebulaRef = useRef(null);
-  const dissolveRef = useRef(null);
-  const [transitioned, setTransitioned] = useState(false);
-
-  // --- Audio State and Refs ---
-  const audioRef = useRef(null);
+  const [activeVideo, setActiveVideo] = useState("blackhole"); // 'blackhole' or 'nebula'
+  const [showDissolve, setShowDissolve] = useState(false); // Controls the dissolve overlay
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
 
-  const formRef = useRef();
+  const blackholeVideoRef = useRef(null);
+  const nebulaVideoRef = useRef(null);
+  const audioRef = useRef(new Audio("/assets/interstellar-theme.mp3")); // Direct audio element
+  const formRef = useRef(null);
 
+  // --- EmailJS Form Submission ---
   const handleSubmit = (e) => {
     e.preventDefault();
     emailjs
@@ -37,127 +64,104 @@ function App() {
       );
   };
 
-  // --- Initial Video Loading & Setup ---
+  // --- Initial Video Loading & Loading Screen Logic ---
   useEffect(() => {
-    const blackhole = blackholeRef.current;
-    const nebula = nebulaRef.current;
+    const blackhole = blackholeVideoRef.current;
+    let blackholeLoaded = false;
 
-    let blackholeReady = false;
-    let nebulaReady = false;
-
-    const hideLoadingIfReady = () => {
-      if (blackholeReady) {
-        setIsLoading(false);
-      }
+    // Function to hide loading screen
+    const hideLoadingScreen = () => {
+      setIsLoading(false);
+      console.log("Loading screen hidden.");
     };
 
-    const handleBlackholeReady = () => {
-      blackholeReady = true;
-      hideLoadingIfReady();
-    };
-
-    const handleNebulaReady = () => {
-      nebulaReady = true;
+    // Handle blackhole video ready state
+    const handleBlackholeCanPlay = () => {
+      blackholeLoaded = true;
+      hideLoadingScreen();
     };
 
     if (blackhole) {
       if (blackhole.readyState >= 3) {
-        handleBlackholeReady();
+        // If video is already ready (e.g., cached)
+        handleBlackholeCanPlay();
       } else {
-        blackhole.addEventListener("canplay", handleBlackholeReady);
+        blackhole.addEventListener("canplay", handleBlackholeCanPlay);
       }
     }
 
-    if (nebula) {
-      if (nebula.readyState >= 3) {
-        handleNebulaReady();
-      } else {
-        nebula.addEventListener("canplaythrough", handleNebulaReady);
-      }
-    }
-
+    // Fallback to hide loading screen after a timeout
     const timeoutId = setTimeout(() => {
-      console.warn(
-        "⚠️ Loading fallback triggered after 10s. Forcing loading screen hide."
-      );
-      setIsLoading(false);
-      if (
-        !transitioned &&
-        blackholeRef.current &&
-        blackholeRef.current.paused
-      ) {
-        setTransitioned(true);
+      if (isLoading) {
+        // Only force hide if still loading
+        console.warn(
+          "⚠️ Loading fallback triggered after 10s. Forcing loading screen hide."
+        );
+        hideLoadingScreen();
       }
     }, 10000);
 
+    // Cleanup listeners and timeout
     return () => {
-      if (blackhole)
-        blackhole.removeEventListener("canplay", handleBlackholeReady);
-      if (nebula)
-        nebula.removeEventListener("canplaythrough", handleNebulaReady);
+      if (blackhole) {
+        blackhole.removeEventListener("canplay", handleBlackholeCanPlay);
+      }
       clearTimeout(timeoutId);
     };
-  }, []);
+  }, [isLoading]); // Added isLoading to dependencies to react to its state changes
 
-  // Video time trigger for transition
+  // --- Video Transition Logic (Blackhole to Nebula) ---
   useEffect(() => {
-    const bh = blackholeRef.current;
-    if (!bh || transitioned) return;
+    const blackhole = blackholeVideoRef.current;
+    if (!blackhole) return;
 
-    const handleTime = () => {
-      if (bh.currentTime >= 28.95) {
-        setTransitioned(true);
-        startTransition();
+    const handleTimeUpdate = () => {
+      // Trigger transition slightly before the end of the blackhole video
+      if (
+        blackhole.currentTime >= blackhole.duration - 1.5 &&
+        activeVideo === "blackhole"
+      ) {
+        setShowDissolve(true);
+        setTimeout(() => {
+          setActiveVideo("nebula");
+          if (blackhole) blackhole.pause(); // Pause the blackhole video
+          // The nebula video will start playing automatically due to `autoplay` prop
+          setShowDissolve(false); // Remove dissolve after transition
+        }, 800); // Duration of the dissolve transition in CSS
       }
     };
 
-    bh.addEventListener("timeupdate", handleTime);
-    return () => bh.removeEventListener("timeupdate", handleTime);
-  }, [transitioned]);
+    // Add listener for time update
+    blackhole.addEventListener("timeupdate", handleTimeUpdate);
 
-  const startTransition = () => {
-    dissolveRef.current.classList.add("show");
-
-    setTimeout(() => {
-      if (blackholeRef.current) {
-        blackholeRef.current.style.display = "none";
-      }
-      if (nebulaRef.current) {
-        nebulaRef.current.classList.remove("hidden");
-        nebulaRef.current.classList.add("fade-in");
-        nebulaRef.current.play();
-      }
-
-      setTimeout(() => {
-        if (dissolveRef.current) {
-          dissolveRef.current.classList.remove("show");
-        }
-      }, 600);
-    }, 1000);
-  };
+    // Clean up
+    return () => {
+      blackhole.removeEventListener("timeupdate", handleTimeUpdate);
+    };
+  }, [activeVideo]); // Re-run effect if activeVideo changes
 
   // --- Audio Control Functions ---
-  const toggleAudio = () => {
+  const toggleAudio = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     if (audio.paused) {
       audio
         .play()
-        .then(() => {
-          // setIsAudioPlaying(true); // Handled by the 'play' event listener below
-        })
-        .catch((err) => console.warn("Audio play failed:", err));
+        .catch((err) =>
+          console.warn("Audio play failed (user initiated):", err)
+        );
     } else {
       audio.pause();
-      // setIsAudioPlaying(false); // Handled by the 'pause' event listener below
     }
-  };
+  }, []);
 
-  // --- Audio Event Listener Effect (Modified for delay) ---
+  // --- Audio Event Listener Effect & Autoplay Delay ---
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+
+    audio.loop = true; // Ensure audio loops
 
     const handlePlay = () => setIsAudioPlaying(true);
     const handlePause = () => setIsAudioPlaying(false);
@@ -165,26 +169,24 @@ function App() {
     audio.addEventListener("play", handlePlay);
     audio.addEventListener("pause", handlePause);
 
-    // --- NEW: Start audio after 7 seconds ---
+    // Attempt to play audio after a delay for initial ambience
     const playTimeout = setTimeout(() => {
       audio.play().catch((err) => {
         // This catch handles cases where autoplay is blocked (e.g., due to user interaction policies)
         console.warn("Audio autoplay blocked or failed after delay:", err);
         setIsAudioPlaying(false); // Ensure state is correct if it can't play
       });
-    }, 7000); // 7000 milliseconds = 7 seconds
+    }, 7000); // 7 seconds delay
 
-    // Initialize state based on current audio status (optional, but good for immediate feedback)
-    // setIsAudioPlaying(!audio.paused); // This might be misleading if autoplay is blocked, but fine if user clicks later
-
+    // Cleanup listeners and timeout
     return () => {
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
-      clearTimeout(playTimeout); // Clean up the timeout if component unmounts
+      clearTimeout(playTimeout);
     };
-  }, []); // Empty dependency array means this runs once on mount.
+  }, []); // Empty dependency array means this runs once on mount
 
-  // Typewriting effect
+  // --- Typewriting Effect for About Section ---
   useEffect(() => {
     const roles = [
       "CSE Undergrad at IIIT-Bh.",
@@ -196,10 +198,11 @@ function App() {
     let roleIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
+    let typingTimer;
 
     const type = () => {
       const currentRole = roles[roleIndex];
-      if (!el) return;
+      if (!el) return; // Exit if element is not found
 
       if (isDeleting) {
         el.textContent = currentRole.substring(0, charIndex--);
@@ -207,75 +210,94 @@ function App() {
         el.textContent = currentRole.substring(0, charIndex++);
       }
 
-      let delay = isDeleting ? 50 : 100;
+      let delay = isDeleting ? 50 : 100; // Faster deletion
 
       if (!isDeleting && charIndex === currentRole.length + 1) {
-        delay = 1200;
+        delay = 1200; // Pause at end of typing
         isDeleting = true;
       } else if (isDeleting && charIndex === 0) {
         isDeleting = false;
-        roleIndex = (roleIndex + 1) % roles.length;
-        delay = 500;
+        roleIndex = (roleIndex + 1) % roles.length; // Cycle roles
+        delay = 500; // Pause before typing next role
       }
-
-      setTimeout(type, delay);
+      typingTimer = setTimeout(type, delay);
     };
 
-    type();
-  }, []);
+    type(); // Start the typing effect
+
+    // Cleanup function to clear the timeout when the component unmounts
+    return () => clearTimeout(typingTimer);
+  }, []); // Empty dependency array ensures this runs once on mount
+
+  // --- Dynamic Tech Icon Positioning ---
+  const techIconsData = [
+    { src: htmlIcon, alt: "HTML5" },
+    { src: cssIcon, alt: "CSS3" },
+    { src: jsIcon, alt: "JavaScript" },
+    { src: reactIcon, alt: "React" },
+    { src: nodeIcon, alt: "Node.js" },
+    { src: tailwindIcon, alt: "Tailwind CSS" },
+    { src: mongodbIcon, alt: "MongoDB" },
+    { src: javaIcon, alt: "Java" },
+    { src: cIcon, alt: "C" },
+    { src: cppIcon, alt: "C++" },
+    { src: gitIcon, alt: "Git" },
+    { src: githubIcon, alt: "GitHub" },
+    { src: intellijIcon, alt: "IntelliJ IDEA" },
+    { src: vscodeIcon, alt: "Visual Studio Code" },
+    { src: azureSqlIcon, alt: "Azure SQL Database" },
+  ];
+
+  // Projects data
+  const projectCards = [
+    {
+      title: "♻️ Kabadiwala ( In Progress⏳ )",
+      description:
+        "Turning trash into change — Kabadiwala is a sustainable platform where users can schedule waste pickups, track segregation stats, and earn eco-points. Designed to make recycling effortless and rewarding.",
+      link: "https://github.com/Rishit-dev2023/Kabadiwala",
+      warning: false,
+    },
+    {
+      title: "🚀 Spacefolio",
+      description: `A cinematic portfolio drifting through blackholes and looping nebulas, crafted with React and cosmic vibes.
+        (⚠️ Do not Click here!!!)`,
+      link: "https://spacefolio-two.vercel.app/",
+      warning: true,
+      onClick: () => {
+        alert(
+          "🚨java.lang.StackOverflowError!!!🚨\nYou're inside a portfolio that recurses to itself. 🌀\nIf you know, you know 😉"
+        );
+        window.location.href = "https://spacefolio-two.vercel.app/";
+      },
+    },
+  ];
 
   return (
     <>
+      {/* --- Loading Screen --- */}
       {isLoading && (
-        <div className={`loading-screen ${!isLoading ? "fade-out" : ""}`}>
+        <div className="loading-screen">
           <div className="loader"></div>
           <p>🚀 Initiating Cosmic Interface...</p>
         </div>
       )}
 
-      {/* 🔭 Blackhole Video */}
-      {!transitioned && (
-        <video
-          ref={blackholeRef}
-          className="video-bg"
-          autoPlay
-          muted
-          playsInline
-          preload="auto"
-          onLoadedMetadata={() => {
-            const bh = blackholeRef.current;
-            if (bh) {
-              bh.currentTime = 0;
-              bh.play()
-                .then(() => {
-                  console.log("Blackhole video started playing.");
-                })
-                .catch((error) => {
-                  console.error(
-                    "Error playing blackhole video on metadata load:",
-                    error
-                  );
-                  setTransitioned(true);
-                });
-            }
-          }}
-          onEnded={() => {
-            if (!transitioned) {
-              console.log("Blackhole video ended, forcing transition.");
-              setTransitioned(true);
-              startTransition();
-            }
-          }}
-        >
-          <source src="/assets/blackhole.webm" type="video/webm" />
-          Your browser does not support the video tag.
-        </video>
-      )}
-
-      {/* 🌌 Nebula Video */}
+      {/* --- Video Backgrounds --- */}
       <video
-        ref={nebulaRef}
-        className={`video-bg ${transitioned ? "fade-in" : "hidden"}`}
+        ref={blackholeVideoRef}
+        className={`video-bg ${activeVideo === "blackhole" ? "is-active" : ""}`}
+        autoPlay
+        muted
+        playsInline
+        preload="auto"
+      >
+        <source src="/assets/blackhole.webm" type="video/webm" />
+        Your browser does not support the video tag.
+      </video>
+
+      <video
+        ref={nebulaVideoRef}
+        className={`video-bg ${activeVideo === "nebula" ? "is-active" : ""}`}
         autoPlay
         muted
         playsInline
@@ -286,10 +308,10 @@ function App() {
         Your browser does not support the video tag.
       </video>
 
-      {/* 🕳️ Dissolve Transition */}
-      <div ref={dissolveRef} className="dissolve"></div>
+      {/* --- Dissolve Transition Overlay --- */}
+      <div className={`dissolve ${showDissolve ? "show" : ""}`}></div>
 
-      {/* 🚀 Navbar */}
+      {/* --- Navbar --- */}
       <nav className="navbar">
         <a
           href="https://spacefolio-two.vercel.app/"
@@ -332,22 +354,28 @@ function App() {
         </ul>
       </nav>
 
-      {/* ✨ Hero */}
+      {/* --- Audio Toggle Button --- */}
+      <button
+        onClick={toggleAudio}
+        className={`audio-toggle ${isAudioPlaying ? "glow" : "static"}`}
+      >
+        <img
+          src={isAudioPlaying ? UnmuteIcon : MuteIcon} // Corrected: Unmute when playing, Mute when paused
+          alt={isAudioPlaying ? "Sound On" : "Sound Off"}
+        />
+      </button>
+
+      {/* --- Hero Section --- */}
       <section className="hero">
-        <h2 className="hero-title" style={{ fontSize: "3.5rem" }}>
-          Welcome to the Cosmos
-        </h2>
-        <p
-          className="cosmic-quote"
-          style={{ fontSize: "1.9rem", lineHeight: "1.8" }}
-        >
+        <h2 className="hero-title">Welcome to the Cosmos</h2>
+        <p className="cosmic-quote">
           “Love is the one thing we're capable of perceiving that transcends
           dimensions of time and space.”
           <strong>– Interstellar</strong>
         </p>
       </section>
 
-      {/* 🌌 About Section */}
+      {/* --- About Section --- */}
       <section id="about" className="about-section fade-in-enchant">
         <p className="about-intro">Hey, I'm</p>
         <h2 className="about-name">
@@ -361,10 +389,14 @@ function App() {
         <p className="about-description">
           <span style={{ fontSize: "2rem", fontWeight: "bold" }}>In</span>
           <br />
-          ⛰️ the quiet beauty of <strong>nature,</strong>,<br />
-          🎶 the healing rhythm of <strong>music</strong>,<br />
-          ✍️ the magic of <strong>words</strong>,<br />
-          💻 the colorful lines of <strong>code</strong>,<br />
+          ⛰️ the quiet beauty of <strong>nature,</strong>,
+          <br />
+          🎶 the healing rhythm of <strong>music</strong>,
+          <br />
+          ✍️ the magic of <strong>words</strong>,
+          <br />
+          💻 the colorful lines of <strong>code</strong>,
+          <br />
           🌌 and the wonder of the <strong>stars</strong> —
           <span style={{ fontSize: "1.8rem", fontWeight: "bold" }}>
             {" "}
@@ -385,156 +417,55 @@ function App() {
         </p>
       </section>
 
-      {/* 🌌 Tech Stack section */}
+      {/* --- Tech Stack section --- */}
       <section id="tech-stack" className="tech-stack-section">
-        <h2
-          className="section-title"
-          style={{ fontSize: "2.8rem", color: "#FFFFFF", textAlign: "center" }}
-        >
-          🪐 Stacks in Zero Gravity
-        </h2>
-
-        <div class="floating-icons">
-          {/* Added loading="lazy" */}
-          <img
-            src="/assets/HTML5.svg"
-            class="tech-icon"
-            loading="lazy"
-            alt="HTML5"
-          />
-          <img
-            src="/assets/CSS3.svg"
-            class="tech-icon"
-            loading="lazy"
-            alt="CSS3"
-          />
-          <img
-            src="/assets/JavaScript.svg"
-            class="tech-icon"
-            loading="lazy"
-            alt="JavaScript"
-          />
-          <img
-            src="/assets/react.svg"
-            class="tech-icon"
-            loading="lazy"
-            alt="React"
-          />
-          <img
-            src="/assets/Node.js.svg"
-            class="tech-icon"
-            loading="lazy"
-            alt="Node.js"
-          />
-          <img
-            src="/assets/Tailwind CSS.svg"
-            class="tech-icon"
-            loading="lazy"
-            alt="Tailwind CSS"
-          />
-          <img
-            src="/assets/MongoDB.svg"
-            class="tech-icon"
-            loading="lazy"
-            alt="MongoDB"
-          />
-          <img
-            src="/assets/Java.svg"
-            class="tech-icon"
-            loading="lazy"
-            alt="Java"
-          />
-          <img src="/assets/C.svg" class="tech-icon" loading="lazy" alt="C" />
-          <img
-            src="/assets/Cplus.svg"
-            class="tech-icon"
-            loading="lazy"
-            alt="C++"
-          />
-          <img
-            src="/assets/Git.svg"
-            class="tech-icon"
-            loading="lazy"
-            alt="Git"
-          />
-          <img
-            src="/assets/github-142-svgrepo-com.svg"
-            class="tech-icon"
-            loading="lazy"
-            alt="GitHub"
-          />
-          <img
-            src="/assets/IntelliJ IDEA.svg"
-            class="tech-icon"
-            loading="lazy"
-            alt="IntelliJ IDEA"
-          />
-          <img
-            src="/assets/Visual Studio Code (VS Code).svg"
-            class="tech-icon"
-            loading="lazy"
-            alt="Visual Studio Code"
-          />
-          <img
-            src="/assets/Azure SQL Database.svg"
-            class="tech-icon"
-            loading="lazy"
-            alt="Azure SQL Database"
-          />
+        <h2 className="section-title">🪐 Stacks in Zero Gravity</h2>
+        <div className="floating-icons">
+          {techIconsData.map((icon, index) => (
+            <img
+              key={index}
+              src={icon.src}
+              className="tech-icon"
+              loading="lazy"
+              alt={icon.alt}
+              // Added inline style for individual animation delay if needed
+              style={{ animationDelay: `${index * 0.1}s` }}
+            />
+          ))}
         </div>
       </section>
 
-      {/* 🚧 Projects Section */}
+      {/* --- Projects Section --- */}
       <section id="projects" className="section">
-        <h2>Projects</h2>
+        <h2>My Cosmic Creations</h2>
         <div className="projects-grid">
-          <div
-            className="project-card hoverable"
-            onClick={() =>
-              window.open(
-                "https://github.com/Rishit-dev2023/Kabadiwala",
-                "_blank"
-              )
-            }
-          >
-            <h3>
-              <u>♻️ Kabadiwala ( In Progress⏳ )</u>
-            </h3>
-
-            <p>
-              Turning trash into change — Kabadiwala is a sustainable platform
-              where users can schedule waste pickups, track segregation stats,
-              and earn eco-points. Designed to make recycling effortless and
-              rewarding.
-            </p>
-          </div>
-          <div
-            className="project-card hoverable"
-            onClick={() => {
-              alert(
-                "🚨java.lang.StackOverflowError!!!🚨\nYou're inside a portfolio that recurses to itself. 🌀\nIf you know, you know 😉"
-              );
-              window.location.href = "https://spacefolio-two.vercel.app/";
-            }}
-          >
-            <h3>
-              <u>🚀 Spacefolio</u>
-            </h3>
-            <p>
-              A cinematic portfolio drifting through blackholes and looping
-              nebulas, crafted with React and cosmic vibes.
-              <br />
-              <span className="animate-pulse-danger">
-                (⚠️ Do not Click here!!!)
-              </span>
-            </p>
-          </div>
+          {projectCards.map((project, index) => (
+            <div
+              key={index}
+              className="project-card hoverable"
+              onClick={
+                project.onClick || (() => window.open(project.link, "_blank"))
+              }
+            >
+              <h3>
+                <u>{project.title}</u>
+              </h3>
+              <p>
+                {project.description}
+                {project.warning && <br /> && (
+                  <span className="animate-pulse-danger">
+                    (⚠️ Do not Click here!!!)
+                  </span>
+                )}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* 📡 Contact Section */}
+      {/* --- Contact Section --- */}
       <section id="contact" className="section">
-        <h2>Contact</h2>
+        <h2>Connect Across the Universe</h2>
         <p>Have a project in mind or just want to talk space? Reach out!</p>
         <form ref={formRef} className="contact-form" onSubmit={handleSubmit}>
           <input
@@ -552,65 +483,46 @@ function App() {
           <textarea
             name="message"
             placeholder="Your Message"
+            rows="6"
             required
           ></textarea>
           <button type="submit">Send Message</button>
         </form>
       </section>
-      {/* 🌌 Footer */}
+
+      {/* --- Footer --- */}
       <footer className="footer">
         <div className="social-icons">
-          {/* Added loading="lazy" */}
           <a
             href="https://www.linkedin.com/in/rishit-tripathy"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img
-              src="/assets/iconmonstr-linkedin-3.svg"
-              alt="LinkedIn"
-              loading="lazy"
-            />
+            <img src={linkedinSocialIcon} alt="LinkedIn" loading="lazy" />
           </a>
           <a href="mailto:rishittripathy2020@gmail.com">
-            <img
-              src="/assets/email-svgrepo-com.svg"
-              alt="Email"
-              loading="lazy"
-            />
+            <img src={emailSocialIcon} alt="Email" loading="lazy" />
           </a>
           <a
             href="https://github.com/Rishit-dev2023"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img
-              src="/assets/github-142-svgrepo-com.svg"
-              alt="GitHub"
-              loading="lazy"
-            />
+            <img src={githubSocialIcon} alt="GitHub" loading="lazy" />
           </a>
           <a
             href="https://leetcode.com/u/rishittripathy2020/"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img
-              src="/assets/leetcode-svgrepo-com.svg"
-              alt="LeetCode"
-              loading="lazy"
-            />
+            <img src={leetcodeSocialIcon} alt="LeetCode" loading="lazy" />
           </a>
           <a
             href="https://codeforces.com/profile/rishittripathy2020"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img
-              src="/assets/codeforces-svgrepo-com.svg"
-              alt="Codeforces"
-              loading="lazy"
-            />
+            <img src={codeforcesSocialIcon} alt="Codeforces" loading="lazy" />
           </a>
         </div>
 
@@ -624,24 +536,6 @@ function App() {
           © {new Date().getFullYear()} Rishit Tripathy. All galaxies reserved.
         </p>
       </footer>
-
-      {/* --- Audio Player and Button --- */}
-      <audio ref={audioRef} preload="auto" loop>
-        <source src="/assets/interstellar-theme.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
-
-      <button
-        onClick={toggleAudio}
-        className={`audio-toggle ${isAudioPlaying ? "glow" : "static"}`}
-      >
-        <img
-          src={
-            isAudioPlaying ? "/assets/sound-on.svg" : "/assets/sound-off.svg"
-          }
-          alt={isAudioPlaying ? "Sound On" : "Sound Off"}
-        />
-      </button>
     </>
   );
 }
