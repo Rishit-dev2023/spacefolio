@@ -152,7 +152,7 @@ function App() {
     if (!audio) return;
 
     audio.loop = true;
-    audio.volume = 0.3;
+    
 
     const handlePlay = () => setIsAudioPlaying(true);
     const handlePause = () => setIsAudioPlaying(false);
