@@ -3,11 +3,10 @@ import "./App.css";
 import emailjs from "@emailjs/browser";
 
 // Import icons (ensure these paths are correct relative to your project structure)
-// Paths updated to be absolute from the public directory
 import MuteIcon from "/assets/sound-off.svg";
 import UnmuteIcon from "/assets/sound-on.svg";
 
-// Tech Icons - paths updated to be absolute from the public directory
+// Tech Icons
 import htmlIcon from "/assets/HTML5.svg";
 import cssIcon from "/assets/CSS3.svg";
 import jsIcon from "/assets/JavaScript.svg";
@@ -24,7 +23,7 @@ import intellijIcon from "/assets/IntelliJ IDEA.svg";
 import vscodeIcon from "/assets/Visual Studio Code (VS Code).svg";
 import azureSqlIcon from "/assets/Azure SQL Database.svg";
 
-// Social Icons - paths updated to be absolute from the public directory
+// Social Icons
 import linkedinSocialIcon from "/assets/iconmonstr-linkedin-3.svg";
 import emailSocialIcon from "/assets/email-svgrepo-com.svg";
 import githubSocialIcon from "/assets/github-142-svgrepo-com.svg";
@@ -36,10 +35,11 @@ function App() {
   const [activeVideo, setActiveVideo] = useState("blackhole"); // 'blackhole' or 'nebula'
   const [showDissolve, setShowDissolve] = useState(false); // Controls the dissolve overlay
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [isAudioLoaded, setIsAudioLoaded] = useState(false); // New state for audio loading
 
   const blackholeVideoRef = useRef(null);
   const nebulaVideoRef = useRef(null);
-  const audioRef = useRef(new Audio("/assets/interstellar-theme.mp3")); // Direct audio element
+  const audioRef = useRef(new Audio("/assets/interstellar-theme.mp3"));
   const formRef = useRef(null);
 
   // --- EmailJS Form Submission ---
@@ -69,13 +69,11 @@ function App() {
     const blackhole = blackholeVideoRef.current;
     let blackholeLoaded = false;
 
-    // Function to hide loading screen
     const hideLoadingScreen = () => {
       setIsLoading(false);
       console.log("Loading screen hidden.");
     };
 
-    // Handle blackhole video ready state
     const handleBlackholeCanPlay = () => {
       blackholeLoaded = true;
       hideLoadingScreen();
@@ -83,17 +81,14 @@ function App() {
 
     if (blackhole) {
       if (blackhole.readyState >= 3) {
-        // If video is already ready (e.g., cached)
         handleBlackholeCanPlay();
       } else {
         blackhole.addEventListener("canplay", handleBlackholeCanPlay);
       }
     }
 
-    // Fallback to hide loading screen after a timeout
     const timeoutId = setTimeout(() => {
       if (isLoading) {
-        // Only force hide if still loading
         console.warn(
           "⚠️ Loading fallback triggered after 10s. Forcing loading screen hide."
         );
@@ -101,14 +96,13 @@ function App() {
       }
     }, 10000);
 
-    // Cleanup listeners and timeout
     return () => {
       if (blackhole) {
         blackhole.removeEventListener("canplay", handleBlackholeCanPlay);
       }
       clearTimeout(timeoutId);
     };
-  }, [isLoading]); // Added isLoading to dependencies to react to its state changes
+  }, [isLoading]);
 
   // --- Video Transition Logic (Blackhole to Nebula) ---
   useEffect(() => {
@@ -116,7 +110,6 @@ function App() {
     if (!blackhole) return;
 
     const handleTimeUpdate = () => {
-      // Trigger transition slightly before the end of the blackhole video
       if (
         blackhole.currentTime >= blackhole.duration - 1.5 &&
         activeVideo === "blackhole"
@@ -124,21 +117,18 @@ function App() {
         setShowDissolve(true);
         setTimeout(() => {
           setActiveVideo("nebula");
-          if (blackhole) blackhole.pause(); // Pause the blackhole video
-          // The nebula video will start playing automatically due to `autoplay` prop
-          setShowDissolve(false); // Remove dissolve after transition
-        }, 800); // Duration of the dissolve transition in CSS
+          if (blackhole) blackhole.pause();
+          setShowDissolve(false);
+        }, 800);
       }
     };
 
-    // Add listener for time update
     blackhole.addEventListener("timeupdate", handleTimeUpdate);
 
-    // Clean up
     return () => {
       blackhole.removeEventListener("timeupdate", handleTimeUpdate);
     };
-  }, [activeVideo]); // Re-run effect if activeVideo changes
+  }, [activeVideo]);
 
   // --- Audio Control Functions ---
   const toggleAudio = useCallback(() => {
@@ -161,30 +151,34 @@ function App() {
     const audio = audioRef.current;
     if (!audio) return;
 
-    audio.loop = true; // Ensure audio loops
+    audio.loop = true;
+    audio.volume = 0.3;
 
     const handlePlay = () => setIsAudioPlaying(true);
     const handlePause = () => setIsAudioPlaying(false);
+    const handleCanPlayThrough = () => {
+      console.log("Audio is ready to play through.");
+      setIsAudioLoaded(true); // Set audio as loaded
+    };
 
     audio.addEventListener("play", handlePlay);
     audio.addEventListener("pause", handlePause);
+    audio.addEventListener("canplaythrough", handleCanPlayThrough); // Listen for canplaythrough
 
-    // Attempt to play audio after a delay for initial ambience
     const playTimeout = setTimeout(() => {
       audio.play().catch((err) => {
-        // This catch handles cases where autoplay is blocked (e.g., due to user interaction policies)
         console.warn("Audio autoplay blocked or failed after delay:", err);
-        setIsAudioPlaying(false); // Ensure state is correct if it can't play
+        setIsAudioPlaying(false);
       });
-    }, 7000); // 7 seconds delay
+    }, 7000);
 
-    // Cleanup listeners and timeout
     return () => {
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
+      audio.removeEventListener("canplaythrough", handleCanPlayThrough);
       clearTimeout(playTimeout);
     };
-  }, []); // Empty dependency array means this runs once on mount
+  }, []);
 
   // --- Typewriting Effect for About Section ---
   useEffect(() => {
@@ -202,7 +196,7 @@ function App() {
 
     const type = () => {
       const currentRole = roles[roleIndex];
-      if (!el) return; // Exit if element is not found
+      if (!el) return;
 
       if (isDeleting) {
         el.textContent = currentRole.substring(0, charIndex--);
@@ -210,24 +204,23 @@ function App() {
         el.textContent = currentRole.substring(0, charIndex++);
       }
 
-      let delay = isDeleting ? 50 : 100; // Faster deletion
+      let delay = isDeleting ? 50 : 100;
 
       if (!isDeleting && charIndex === currentRole.length + 1) {
-        delay = 1200; // Pause at end of typing
+        delay = 1200;
         isDeleting = true;
       } else if (isDeleting && charIndex === 0) {
         isDeleting = false;
-        roleIndex = (roleIndex + 1) % roles.length; // Cycle roles
-        delay = 500; // Pause before typing next role
+        roleIndex = (roleIndex + 1) % roles.length;
+        delay = 500;
       }
       typingTimer = setTimeout(type, delay);
     };
 
-    type(); // Start the typing effect
+    type();
 
-    // Cleanup function to clear the timeout when the component unmounts
     return () => clearTimeout(typingTimer);
-  }, []); // Empty dependency array ensures this runs once on mount
+  }, []);
 
   // --- Dynamic Tech Icon Positioning ---
   const techIconsData = [
@@ -355,15 +348,17 @@ function App() {
       </nav>
 
       {/* --- Audio Toggle Button --- */}
-      <button
-        onClick={toggleAudio}
-        className={`audio-toggle ${isAudioPlaying ? "glow" : "static"}`}
-      >
-        <img
-          src={isAudioPlaying ? UnmuteIcon : MuteIcon} // Corrected: Unmute when playing, Mute when paused
-          alt={isAudioPlaying ? "Sound On" : "Sound Off"}
-        />
-      </button>
+      {isAudioLoaded && ( // Only render the button if audio is loaded
+        <button
+          onClick={toggleAudio}
+          className={`audio-toggle ${isAudioPlaying ? "glow" : "static"}`}
+        >
+          <img
+            src={isAudioPlaying ? UnmuteIcon : MuteIcon}
+            alt={isAudioPlaying ? "Sound On" : "Sound Off"}
+          />
+        </button>
+      )}
 
       {/* --- Hero Section --- */}
       <section className="hero">
@@ -428,7 +423,6 @@ function App() {
               className="tech-icon"
               loading="lazy"
               alt={icon.alt}
-              // Added inline style for individual animation delay if needed
               style={{ animationDelay: `${index * 0.1}s` }}
             />
           ))}
