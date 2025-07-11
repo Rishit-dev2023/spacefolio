@@ -873,3 +873,76 @@
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
   cursor: pointer;
 }
+.nebula-fade {
+  opacity: 1;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.nebula-fade-out {
+  opacity: 0;
+}
+
+.nebula-fade-in {
+  opacity: 1;
+}
+.audio-toggle {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  width: 70px;
+  height: 70px;
+  background: rgba(192, 192, 192, 0.1); /* silver tone base */
+  border-radius: 50%;
+  border: 2px solid rgba(192, 192, 192, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 12px rgba(192, 192, 192, 0.6), 
+              0 0 20px rgba(192, 192, 192, 0.4),
+              inset 0 0 10px rgba(192, 192, 192, 0.2);
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+.audio-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.9),
+              0 0 25px rgba(192, 192, 192, 0.8),
+              inset 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.audio-toggle img {
+  width: 30px;
+  height: 30px;
+  filter: drop-shadow(0 0 2px #fff);
+}
+
+/* Optional pulsing glow animation */
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 12px rgba(192, 192, 192, 0.5),
+                0 0 20px rgba(192, 192, 192, 0.3),
+                inset 0 0 10px rgba(192, 192, 192, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(255, 255, 255, 0.7),
+                0 0 28px rgba(192, 192, 192, 0.6),
+                inset 0 0 14px rgba(255, 255, 255, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 12px rgba(192, 192, 192, 0.5),
+                0 0 20px rgba(192, 192, 192, 0.3),
+                inset 0 0 10px rgba(192, 192, 192, 0.2);
+  }
+}
+.audio-toggle.static {
+  animation: none;
+  box-shadow: 0 0 6px rgba(192, 192, 192, 0.3),
+              0 0 10px rgba(192, 192, 192, 0.2),
+              inset 0 0 5px rgba(192, 192, 192, 0.1);
+}
+
