@@ -921,3 +921,10 @@
               0 0 10px rgba(192, 192, 192, 0.2),
               inset 0 0 5px rgba(192, 192, 192, 0.1);
 }
+.section-title {
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #ffffff; 
+}
