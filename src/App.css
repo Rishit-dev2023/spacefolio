@@ -928,3 +928,29 @@
   margin-bottom: 2rem;
   color: #ffffff; 
 }
+.zero-gravity-floating {
+  display: inline-block;
+  animation: float-zero 6s ease-in-out infinite;
+  color: #00eaff;
+  font-weight: 600;
+  text-shadow: 0 0 6px #00eaff80, 0 0 12px #00eaff50;
+}
+
+@keyframes float-zero {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+  25% {
+    transform: translate(3px, -4px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-3px, 2px) rotate(-1.5deg);
+  }
+  75% {
+    transform: translate(2px, -3px) rotate(1deg);
+  }
+  100% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+}
+
