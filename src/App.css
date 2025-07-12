@@ -931,9 +931,9 @@
 .zero-gravity-floating {
   display: inline-block;
   animation: float-zero 6s ease-in-out infinite;
-  color: #00eaff;
+  color: #ffffff;
   font-weight: 600;
-  text-shadow: 0 0 6px #00eaff80, 0 0 12px #00eaff50;
+  text-shadow: 0 0 6px #00eaff80, 0 0 12px #000000;
 }
 
 @keyframes float-zero {
