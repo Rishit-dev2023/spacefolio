@@ -934,7 +934,7 @@
   animation: slowFloatUpDown 6s ease-in-out infinite;
   color: #ffffff;
   font-weight: 600;
-  text-shadow: 0 0 8px #ffffff, 0 0 14px #ffffff;
+
 }
 
 @keyframes slowFloatUpDown {
