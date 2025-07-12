@@ -414,7 +414,10 @@ Crafted to feel less like a website, more like a voyage through spacetime.  `,
 
       {/* --- Tech Stack section --- */}
       <section id="tech-stack" className="tech-stack-section">
-        <h2 className="section-title">🪐 Stacks in Zero Gravity</h2>
+        <h2 className="section-title">
+  🪐 Stacks in <span className="zero-gravity-floating">Zero Gravity</span>
+</h2>
+
         <div className="floating-icons">
           {techIconsData.map((icon, index) => (
             <img
