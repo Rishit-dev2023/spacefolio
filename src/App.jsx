@@ -242,28 +242,41 @@ function App() {
   ];
 
   // Projects data
-  const projectCards = [
-    {
-      title: "♻️ Kabadiwala ( In Progress⏳ )",
-      description:
-        "Turning trash into change — Kabadiwala is a sustainable platform where users can schedule waste pickups, track segregation stats, and earn eco-points. Designed to make recycling effortless and rewarding.",
-      link: "https://github.com/Rishit-dev2023/Kabadiwala",
-      warning: false,
+const projectCards = [
+  {
+    title: "🚛 NexusRoute",
+    description:
+      "Supply chains break. NexusRoute doesn't. A real-time logistics simulator built on a 17-node Indian freight graph — drag a chaos slider, watch disruptions cascade, and let a C++ Dijkstra engine reroute everything in milliseconds. Three paths. Three priorities. Zero downtime.",
+    link: "https://google-solution-challenge-project.vercel.app/",
+    warning: false,
+    onClick: () => {
+      window.open("https://google-solution-challenge-project.vercel.app/", "_blank");
     },
-    {
-      title: "🚀 Spacefolio",
-      description: `Spacefolio — a cinematic portfolio orbiting through blackholes, dissolving into nebulas, and echoing with a cosmic tune in the background.
-Crafted to feel less like a website, more like a voyage through spacetime.  `,
-      link: "https://spacefolio-two.vercel.app/",
-      warning: true,
-      onClick: () => {
-        alert(
-          "🚨java.lang.StackOverflowError!!!🚨\nYou're inside a portfolio that recurses to itself. 🌀\nIf you know, you know 😉"
-        );
-        window.location.href = "https://spacefolio-two.vercel.app/";
-      },
+  },
+  {
+    title: "♻️ Kabadiwala",
+    description:
+      "Trash, meet AI. Point your camera at any waste, and Kabadiwala classifies it across 6 categories, scores your segregation, and rewards you for doing it right. Schedule pickups, climb the city leaderboard, and turn responsible disposal into something worth bragging about.",
+    link: "https://kabadiwala-web.vercel.app",
+    warning: false,
+    onClick: () => {
+      window.open("https://kabadiwala-web.vercel.app", "_blank");
     },
-  ];
+  },
+  {
+    title: "🚀 Spacefolio",
+    description:
+      "Spacefolio — a cinematic portfolio orbiting through blackholes, dissolving into nebulas, and echoing with a cosmic tune in the background. Crafted to feel less like a website, more like a voyage through spacetime.",
+    link: "https://spacefolio-two.vercel.app/",
+    warning: true,
+    onClick: () => {
+      alert(
+        "🚨java.lang.StackOverflowError!!!🚨\nYou're inside a portfolio that recurses to itself. 🌀\nIf you know, you know 😉"
+      );
+      window.open("https://spacefolio-two.vercel.app/", "_blank");
+    },
+  },
+];;
 
   return (
     <>
