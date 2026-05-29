@@ -250,7 +250,7 @@ const projectCards = [
     link: "https://google-solution-challenge-project.vercel.app/",
     warning: false,
     onClick: () => {
-      window.open("https://google-solution-challenge-project.vercel.app/", "_blank");
+      window.open("https://nexus-route-frontend.vercel.app", "_blank");
     },
   },
   {
